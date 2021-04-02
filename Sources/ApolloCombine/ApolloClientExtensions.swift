@@ -2,7 +2,7 @@ import Apollo
 import Combine
 import Foundation
 
-public extension ApolloClient {
+public extension ApolloClientProtocol {
   
   /// Fetches a query from the server or from the local cache, depending on the current contents of the cache and the specified cache policy.
   ///
@@ -28,8 +28,9 @@ public extension ApolloClient {
   ///   - queue: A dispatch queue on which the result handler will be called. Defaults to the main queue.
   /// - Returns: A publisher that delivers results from the perform operaion.
   func performPublisher<Mutation: GraphQLMutation>(mutation: Mutation,
+                                                   publishResultToStore: Bool = true,
                                                    queue: DispatchQueue = .main) -> Publishers.ApolloPerform<Mutation> {
-    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, queue: queue)
+    let config = Publishers.ApolloPerformConfiguration(client: self, mutation: mutation, publishResultToStore: publishResultToStore, queue: queue)
     return Publishers.ApolloPerform(with: config)
   }
   
